@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2022 CERN.
+# Copyright (C) 2024 KTH Royal Institute of Technology.
 #
 # Invenio-Banners is free software; you can redistribute it and/or modify it
 # under the terms of the MIT License; see LICENSE file for more details.
 
 """Service level tests for Banners."""
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from invenio_records_resources.services.errors import PermissionDeniedError
@@ -21,7 +22,8 @@ banners = {
         "message": "active",
         "url_path": "/active",
         "category": "info",
-        "end_datetime": datetime.utcnow() + timedelta(days=1),
+        "start_datetime": datetime.now(timezone.utc).isoformat(),
+        "end_datetime": (datetime.now(timezone.utc) + timedelta(days=1)).isoformat(),
         "active": True,
     },
     "inactive": {
@@ -34,28 +36,30 @@ banners = {
         "message": "other",
         "url_path": "/other",
         "category": "warning",
-        "end_datetime": datetime.utcnow() + timedelta(days=5),
+        "start_datetime": datetime.now(timezone.utc).isoformat(),
+        "end_datetime": (datetime.now(timezone.utc) + timedelta(days=5)).isoformat(),
         "active": True,
     },
     "expired": {
         "message": "expired",
         "url_path": "/expired",
         "category": "info",
-        "end_datetime": datetime.utcnow() - timedelta(days=1),
+        "start_datetime": datetime.now(timezone.utc).isoformat(),
+        "end_datetime": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
         "active": True,
     },
     "sub_records_only": {
         "message": "sub_records_only",
         "url_path": "/resources/sub",
         "category": "warning",
-        "start_datetime": datetime.utcnow() - timedelta(days=1),
+        "start_datetime": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
         "active": True,
     },
     "records_only": {
         "message": "records_only",
         "url_path": "/resources",
         "category": "info",
-        "start_datetime": datetime.utcnow() - timedelta(days=1),
+        "start_datetime": (datetime.now(timezone.utc) - timedelta(days=1)).isoformat(),
         "active": True,
     },
 }
